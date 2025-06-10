@@ -1,0 +1,11 @@
+dotenv
+torch
+torchaudio
+pvporcupine
+soundfile
+requests
+pyaudio
+numpy
+sounddevice
+silero
+elevenlabs
