@@ -36,6 +36,9 @@ def handle_wake():
         else:
             elevenlabs_tts_stream(answer)
 
+    if answer[-1] == '?':
+        handle_wake()
+
 def main():
     # Init
     listener = WakeListener("./wake-words/ok-agent_en_linux_v3_0_0.ppn")
