@@ -1,5 +1,4 @@
 from .tool_registry import tool_registry
-import inspect
 
 class Tool(object):
     def __init__(self, args: dict = None):
