@@ -4,9 +4,10 @@ import time
 
 from detect_wake import WakeListener
 from record import record
-from stt import silero_stt
-from llm import GeminiChatClient
-from tts import silero_tts, eleven_tts, eleven_tts_stream
+from stt.silero_stt import silero_stt
+from llm.gemini_llm import GeminiChatClient
+from tts.elevenlabs_tts import elevenlabs_tts_stream
+from tts.silero_tts import silero_tts
 
 # Init
 is_debug = True
@@ -30,7 +31,7 @@ def handle_wake():
         if len(answer) > 400: # to save on ElevenLabs credits
             silero_tts(answer)
         else:
-            eleven_tts_stream(answer)
+            elevenlabs_tts_stream(answer)
 
 def main():
     # Init

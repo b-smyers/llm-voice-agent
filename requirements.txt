@@ -9,3 +9,4 @@ numpy
 sounddevice
 silero
 elevenlabs
+google-genai
