@@ -7,7 +7,8 @@ from record import record
 from stt.silero_stt import silero_stt
 from llm.gemini_llm import GeminiChatClient
 from tts.elevenlabs_tts import elevenlabs_tts_stream
-from tts.silero_tts import silero_tts
+# from tts.silero_tts import silero_tts
+from tts.gemini_tts import gemini_tts
 
 # Init
 is_debug = True
@@ -26,10 +27,12 @@ def handle_wake():
     answer = chat.ask(question=question)
     print("[INFO] Gemini: " + answer)
     if is_debug: # save ElevenLabs credits for production use
-        silero_tts(answer)
+        # silero_tts(answer)
+        gemini_tts(answer)
     else:
         if len(answer) > 400: # to save on ElevenLabs credits
-            silero_tts(answer)
+            # silero_tts(answer)
+            gemini_tts(answer)
         else:
             elevenlabs_tts_stream(answer)
 
