@@ -11,6 +11,6 @@ def whisper_stt(audio_np) -> str:
         sf.write(tmp_wav.name, audio_np, SAMPLE_RATE)
         tmp_filename = tmp_wav.name
 
-    model = whisper.load_model("tiny")
+    model = whisper.load_model("tiny") # Use "tiny.en" for english-only
     result = model.transcribe(tmp_filename)
     return result["text"]
