@@ -1,16 +1,27 @@
 import soundfile as sf
 import tempfile
+import os
 import whisper
+
+from stt.base_stt import BaseSTT
 
 # Audio params
 SAMPLE_RATE = 16000
 
-def whisper_stt(audio_np) -> str:
-    # Save numpy audio to temp WAV file
-    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp_wav:
-        sf.write(tmp_wav.name, audio_np, SAMPLE_RATE)
-        tmp_filename = tmp_wav.name
+class WhisperSTTClient(BaseSTT):
+    def __init__(self, model_size: str = "tiny"):
+        self.model = whisper.load_model(model_size)
 
-    model = whisper.load_model("tiny") # Use "tiny.en" for english-only
-    result = model.transcribe(tmp_filename)
-    return result["text"]
+    def transcribe(self, audio_np) -> str:
+        # Save numpy audio to temp WAV file
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp_wav:
+            sf.write(tmp_wav.name, audio_np, SAMPLE_RATE)
+            tmp_filename = tmp_wav.name
+
+        try:
+            result = self.model.transcribe(tmp_filename)
+            transcript = result["text"]
+        finally:
+            os.remove(tmp_filename)
+
+        return transcript

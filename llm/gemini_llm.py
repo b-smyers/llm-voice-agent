@@ -1,8 +1,12 @@
 import os
+
+from llm.base_llm import BaseLLM
+
 from google import genai
 from google.genai import types
 from utils.tool_registry import tool_registry
 
+# Imported to initialize tool decorators, do not remove
 import utils.tools.advice
 import utils.tools.time
 import utils.tools.date
@@ -10,12 +14,8 @@ import utils.tools.quotes
 import utils.tools.add
 import utils.tools.ping
 
-custom_tools = True
-
-class GeminiChatClient:
+class GeminiLLMClient(BaseLLM):
     def __init__(self, prompt_path="internal_prompt.txt"):
-        self.location = os.getenv("GEMINI_LOCATION")
-        self.project_id = os.getenv("GEMINI_PROJECT_ID")
         self.model_id = os.getenv("GEMINI_MODEL")
 
         self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))

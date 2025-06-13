@@ -2,25 +2,32 @@ import sounddevice as sd
 import numpy as np
 import torch
 
-def silero_tts(text, sample_rate=8000):
-    model, utils = torch.hub.load(
-        repo_or_dir='snakers4/silero-models',
-        model='silero_tts',
-        language='en',
-        speaker='v3_en'
-    )
-    
-    speaker_num = 30 # 103 also sounds good
+from tts.base_tts import BaseTTS
 
-    audio = model.apply_tts(
-        text,
-        speaker='en_' + str(speaker_num),
-        sample_rate=sample_rate
-    )
+class SileroTTSClient(BaseTTS):
+    def __init__(self):
+        self.sample_rate = 8000
+        self.speaker_id = 30
 
-    # Ensure audio shape is 1D for mono output
-    audio = np.squeeze(audio)
-    
-    # Play audio
-    sd.play(audio, samplerate=sample_rate)
-    sd.wait()
+        self.model, self.utils = torch.hub.load(
+            repo_or_dir='snakers4/silero-models',
+            model='silero_tts',
+            language='en',
+            speaker='v3_en'
+        )
+
+    def speak(self, text: str):
+        speaker_tag = f'en_{self.speaker_id}'
+
+        audio = self.model.apply_tts(
+            text,
+            speaker=speaker_tag,
+            sample_rate=self.sample_rate
+        )
+
+        # Ensure audio is 1D
+        audio = np.squeeze(audio)
+
+        # Play the generated audio
+        sd.play(audio, samplerate=self.sample_rate)
+        sd.wait()

@@ -1,47 +1,50 @@
 import torch
-import soundfile as sf  # pip install soundfile
+import soundfile as sf
 import tempfile
 import os
+
+from stt.base_stt import BaseSTT
 
 # Audio params
 SAMPLE_RATE = 16000
 
-# Load Silero STT model from torch.hub
-device = torch.device('cpu')
-stt_model, stt_decoder, stt_utils = torch.hub.load(
-    repo_or_dir='snakers4/silero-models',
-    model='silero_stt',
-    language='en',
-    device=device
-)
-(read_batch, split_into_batches, read_audio, prepare_model_input) = stt_utils
+class SileroSTTClient(BaseSTT):
+    def __init__(self, device: str = 'cpu'):
+        self.device = torch.device(device)
 
-# Load Silero TE (Text Enhancer) - i.e., punctuation and capitalization model
-# No autocorrect unfortunately
-te_model, example_texts, languages, punct, apply_te = torch.hub.load(
-    repo_or_dir='snakers4/silero-models',
-    model='silero_te'
-)
+        # Load Silero STT model from torch.hub
+        self.stt_model, self.stt_decoder, stt_utils = torch.hub.load(
+            repo_or_dir='snakers4/silero-models',
+            model='silero_stt',
+            language='en',
+            device=self.device
+        )
+        self.read_batch, self.split_into_batches, self.read_audio, self.prepare_model_input = stt_utils
 
-def silero_stt(audio_np) -> str:
-    # Save numpy audio to temp WAV file
-    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp_wav:
-        sf.write(tmp_wav.name, audio_np, SAMPLE_RATE)
-        tmp_filename = tmp_wav.name
+        # Load Silero Text Enhancer (punctuation + capitalization)
+        _, _, _, _, self.apply_te = torch.hub.load(
+            repo_or_dir='snakers4/silero-models',
+            model='silero_te'
+        )
 
-    try:
-        batches = split_into_batches([tmp_filename], batch_size=1)
-        input_tensor = prepare_model_input(read_batch(batches[0]), device=device)
+    def transcribe(self, audio_np) -> str:
+        # Save numpy audio to temp WAV file
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp_wav:
+            sf.write(tmp_wav.name, audio_np, SAMPLE_RATE)
+            tmp_filename = tmp_wav.name
 
-        output = stt_model(input_tensor)
-        transcripts = [stt_decoder(out.cpu()) for out in output]
-        transcript = " ".join(transcripts)
-        # print("[INFO] Raw: " + transcript)
+        try:
+            batches = self.split_into_batches([tmp_filename], batch_size=1)
+            input_tensor = self.prepare_model_input(self.read_batch(batches[0]), device=self.device)
 
-        # Apply Text Enhancement
-        # transcript = apply_te(transcript, lan='en')
-        # print("[INFO] Enchanced: " + transcript)
+            output = self.stt_model(input_tensor)
+            transcripts = [self.stt_decoder(out.cpu()) for out in output]
+            transcript = " ".join(transcripts)
 
-    finally:
-        os.remove(tmp_filename)
+            # Apply text enhancement (punctuation, capitalization)
+            transcript = self.apply_te(transcript, lan='en')
+
+        finally:
+            os.remove(tmp_filename)
+
         return transcript
