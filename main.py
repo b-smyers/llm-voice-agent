@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 import time
+import string
 
 from detect_wake import WakeListener
 from record import record
@@ -14,6 +15,10 @@ from tts.gemini_tts import gemini_tts
 is_debug = True
 chat = GeminiChatClient()
 
+def detect_abort(text, abort_keywords):
+    cleaned_text = text.strip().rstrip(string.punctuation).lower()
+    return any(cleaned_text.endswith(keyword) for keyword in abort_keywords)
+
 def handle_ready():
     print("[INFO] Wake word detector ready")
 
@@ -23,6 +28,12 @@ def handle_wake():
     audio = record()
     print("[INFO] Transcribing...")
     question = silero_stt(audio)
+
+    abort_keywords = ['abort', 'cancel', 'stop']
+    if detect_abort(question, abort_keywords):
+        print("[INFO] Aborting interaction.")
+        return
+    
     print("[INFO] Transcription: " + question)
     answer = chat.ask(question=question)
     print("[INFO] Gemini: " + answer)
