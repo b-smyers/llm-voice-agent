@@ -7,7 +7,7 @@ from utils.play_sound import play_sound
 from detect_wake import WakeListener
 from record import record
 from llm.gemini_llm import GeminiChatClient
-from stt.silero_stt import silero_stt
+from stt.whisper_stt import whisper_stt
 from tts.elevenlabs_tts import elevenlabs_tts_stream
 from tts.silero_tts import silero_tts
 from tts.gemini_tts import gemini_tts
@@ -28,7 +28,7 @@ def handle_wake():
     print("[INFO] Recording started... Wait for beep.")
     audio = record()
     print("[INFO] Transcribing...")
-    question = silero_stt(audio)
+    question = whisper_stt(audio)
 
     abort_keywords = ['abort', 'cancel', 'stop']
     if detect_abort(question, abort_keywords):
