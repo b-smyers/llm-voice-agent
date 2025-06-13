@@ -3,12 +3,13 @@ load_dotenv()
 import time
 import string
 
+from utils.play_sound import play_sound
 from detect_wake import WakeListener
 from record import record
-from stt.silero_stt import silero_stt
 from llm.gemini_llm import GeminiChatClient
+from stt.silero_stt import silero_stt
 from tts.elevenlabs_tts import elevenlabs_tts_stream
-# from tts.silero_tts import silero_tts
+from tts.silero_tts import silero_tts
 from tts.gemini_tts import gemini_tts
 
 # Init
@@ -38,12 +39,10 @@ def handle_wake():
     answer = chat.ask(question=question)
     print("[INFO] Gemini: " + answer)
     if is_debug: # save ElevenLabs credits for production use
-        # silero_tts(answer)
-        gemini_tts(answer)
+        silero_tts(answer)
     else:
         if len(answer) > 400: # to save on ElevenLabs credits
-            # silero_tts(answer)
-            gemini_tts(answer)
+            silero_tts(answer)
         else:
             elevenlabs_tts_stream(answer)
 
@@ -56,6 +55,7 @@ def main():
     listener.on_ready.subscribe(handle_ready)
     listener.on_wake.subscribe(handle_wake)
     listener.start()
+    play_sound('sounds/startup.wav')
 
     # Keep the main thread alive
     while True:
