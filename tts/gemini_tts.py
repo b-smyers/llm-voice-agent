@@ -1,7 +1,7 @@
 from google import genai
 from google.genai import types
 from utils.play_sound import play_sound
-import pyaudio
+import tempfile
 import wave
 import os
 
@@ -45,8 +45,9 @@ def gemini_tts(text: str, output_filename: str = 'output.wav'):
 
         audio_data = response.candidates[0].content.parts[0].inline_data.data
 
-        # Save the audio data to a WAV file
-        wave_file(output_filename, audio_data)
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as tmp_file:
+            temp_filename = tmp_file.name
+            wave_file(temp_filename, audio_data)
 
         # Play the generated sound
         play_sound(output_filename)
