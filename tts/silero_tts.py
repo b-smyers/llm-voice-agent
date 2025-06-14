@@ -14,7 +14,8 @@ class SileroTTSClient(BaseTTS):
             repo_or_dir='snakers4/silero-models',
             model='silero_tts',
             language='en',
-            speaker='v3_en'
+            speaker='v3_en',
+            verbose=False
         )
 
     def speak(self, text: str):

@@ -13,14 +13,16 @@ class SileroSTTClient(BaseSTT):
             repo_or_dir='snakers4/silero-models',
             model='silero_stt',
             language='en',
-            device=self.device
+            device=self.device,
+            verbose=False
         )
         self.read_batch, self.split_into_batches, self.read_audio, self.prepare_model_input = stt_utils
 
         # Load Silero Text Enhancer (punctuation + capitalization)
         _, _, _, _, self.apply_te = torch.hub.load(
             repo_or_dir='snakers4/silero-models',
-            model='silero_te'
+            model='silero_te',
+            verbose=False
         )
 
     def transcribe(self, audio_np) -> str:
