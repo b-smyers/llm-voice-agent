@@ -40,4 +40,4 @@ class SileroSTTClient(BaseSTT):
         finally:
             os.remove(tmp_filename)
 
-        return transcript
+        return transcript.strip()
