@@ -69,6 +69,7 @@ class Agent:
             text = self.stt_client.transcribe(audio)
 
             if self._should_abort(text):
+                play_sound('sounds/abort.wav')
                 print("[INFO] Aborting interaction.")
                 break
 
