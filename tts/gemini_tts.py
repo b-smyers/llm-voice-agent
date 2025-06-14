@@ -1,9 +1,7 @@
 import os
-import tempfile
-import wave
 from google import genai
 from google.genai import types
-from utils.play_sound import play_sound
+from utils.audio import play, temp_wave_file
 
 from tts.base_tts import BaseTTS
 
@@ -32,13 +30,6 @@ class GeminiTTSClient(BaseTTS):
         )
 
     def speak(self, text: str):
-        def save_wave_file(filename, pcm_data, channels=1, rate=24000, sample_width=2):
-            with wave.open(filename, "wb") as wf:
-                wf.setnchannels(channels)
-                wf.setsampwidth(sample_width)
-                wf.setframerate(rate)
-                wf.writeframes(pcm_data)
-
         try:
             response = self.client.models.generate_content(
                 model=self.model_id,
@@ -46,15 +37,13 @@ class GeminiTTSClient(BaseTTS):
                 config=self.config
             )
 
-            audio_data = response.candidates[0].content.parts[0].inline_data.data
+            audio_np = response.candidates[0].content.parts[0].inline_data.data
 
-            # Write to temporary WAV file
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as tmp_file:
-                temp_filename = tmp_file.name
-                save_wave_file(temp_filename, audio_data)
+            tmp_filename = temp_wave_file(audio_np=audio_np)
 
             # Play the generated sound
-            play_sound(temp_filename)
-
+            play(tmp_filename)
         except Exception as e:
             print(f"[ERROR]: Gemini TTS - {str(e)}")
+        finally:
+            os.remove(tmp_filename)

@@ -1,12 +1,8 @@
 import torch
-import soundfile as sf
-import tempfile
 import os
 
+from utils.audio import temp_wave_file
 from stt.base_stt import BaseSTT
-
-# Audio params
-SAMPLE_RATE = 16000
 
 class SileroSTTClient(BaseSTT):
     def __init__(self, device: str = 'cpu'):
@@ -28,10 +24,7 @@ class SileroSTTClient(BaseSTT):
         )
 
     def transcribe(self, audio_np) -> str:
-        # Save numpy audio to temp WAV file
-        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp_wav:
-            sf.write(tmp_wav.name, audio_np, SAMPLE_RATE)
-            tmp_filename = tmp_wav.name
+        tmp_filename = temp_wave_file(audio_np)
 
         try:
             batches = self.split_into_batches([tmp_filename], batch_size=1)

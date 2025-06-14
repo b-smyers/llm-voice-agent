@@ -1,8 +1,7 @@
 import time
 import string
-import threading
 
-from utils.play_sound import play_sound
+from utils.audio import play
 from detect_wake import WakeListener
 from record import record
 
@@ -53,7 +52,7 @@ class Agent:
 
     def _handle_ready(self):
         print("[INFO] Wake word detector ready")
-        play_sound('sounds/startup.wav')
+        play('sounds/startup.wav')
 
     def _handle_wake(self):
         while True:
@@ -69,7 +68,7 @@ class Agent:
             text = self.stt_client.transcribe(audio)
 
             if self._should_abort(text):
-                play_sound('sounds/abort.wav')
+                play('sounds/abort.wav')
                 print("[INFO] Aborting interaction.")
                 break
 

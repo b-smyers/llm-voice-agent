@@ -1,4 +1,4 @@
-from utils.play_sound import play_sound
+from utils.audio import play
 import sounddevice as sd
 import numpy as np
 import queue
@@ -18,7 +18,7 @@ def record(silence_threshold=1.5, start_sound_path="sounds/record_start.wav", st
         q.put(audio.copy())
 
     with sd.InputStream(samplerate=SAMPLE_RATE, channels=1, callback=callback, blocksize=FRAMES_PER_SAMPLE) as stream:
-        play_sound(sound_file=start_sound_path)
+        play(sound_file=start_sound_path)
         while True:
             audio = q.get()
             buffer.append(audio)
@@ -30,7 +30,7 @@ def record(silence_threshold=1.5, start_sound_path="sounds/record_start.wav", st
                     break
             else:
                 silence_start = None
-        play_sound(sound_file=stop_sound_path)
+        play(sound_file=stop_sound_path)
 
     audio_np = np.concatenate(buffer)
     return audio_np

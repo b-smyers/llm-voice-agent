@@ -1,6 +1,7 @@
-import sounddevice as sd
+from utils.audio import play, temp_wave_file, resample
 import numpy as np
 import torch
+import os
 
 from tts.base_tts import BaseTTS
 
@@ -23,15 +24,18 @@ class SileroTTSClient(BaseTTS):
         
         speaker_tag = f'en_{self.speaker_id}'
 
-        audio = self.model.apply_tts(
+        audio_np = self.model.apply_tts(
             text,
             speaker=speaker_tag,
             sample_rate=self.sample_rate
         )
 
         # Ensure audio is 1D
-        audio = np.squeeze(audio)
+        audio_np = np.squeeze(audio_np)
 
-        # Play the generated audio
-        sd.play(audio, samplerate=self.sample_rate)
-        sd.wait()
+        # Resample audio
+        audio_np = resample(audio_np=audio_np, original_rate=self.sample_rate, target_rate=16000)
+
+        tmp_filename = temp_wave_file(audio_np)
+        play(tmp_filename)
+        os.remove(tmp_filename)

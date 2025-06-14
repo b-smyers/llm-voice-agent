@@ -11,3 +11,4 @@ silero
 elevenlabs
 google-genai
 openai-whisper
+scipy
