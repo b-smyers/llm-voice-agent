@@ -17,6 +17,10 @@ class SileroTTSClient(BaseTTS):
         )
 
     def speak(self, text: str):
+        if len(text) > 1000:
+            print("[WARN] Text too long to process.")
+            text = "The text was too long to process"
+        
         speaker_tag = f'en_{self.speaker_id}'
 
         audio = self.model.apply_tts(
