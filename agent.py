@@ -67,13 +67,13 @@ class Agent:
             print("[INFO] Transcribing...")
             text = self.stt_client.transcribe(audio)
 
+            print("[INFO] Transcription: " + text)
+            answer = self.llm_client.ask(question=text)
+
             if self._should_abort(text):
                 play('sounds/abort.wav')
                 print("[INFO] Aborting interaction.")
                 break
-
-            print("[INFO] Transcription: " + text)
-            answer = self.llm_client.ask(question=text)
 
             print("[INFO] Gemini: " + answer)
             self.tts_client.speak(answer)
