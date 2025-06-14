@@ -1,6 +1,6 @@
 import pvporcupine
-import pyaudio
-import struct
+import sounddevice as sd
+import numpy as np
 import os
 from threading import Thread
 
@@ -23,14 +23,6 @@ class WakeListener:
             access_key=os.getenv('PICOVOICE_API_KEY'),
             keyword_paths=[self.keyword_path]
         )
-        self.pa = pyaudio.PyAudio()
-        self.stream = self.pa.open(
-            rate=self.porcupine.sample_rate,
-            channels=1,
-            format=pyaudio.paInt16,
-            input=True,
-            frames_per_buffer=self.porcupine.frame_length
-        )
 
         # Events
         self.on_ready = Event()
@@ -43,16 +35,25 @@ class WakeListener:
 
     def _run_loop(self):
         self.on_ready.emit()
-        while self._running:
-            pcm = self.stream.read(self.porcupine.frame_length, exception_on_overflow=False)
-            pcm = struct.unpack_from("h" * self.porcupine.frame_length, pcm)
+        def audio_callback(indata, frames, time, status):
+            if not self._running:
+                return
+            pcm = np.int16(indata[:, 0] * 32768)  # Convert float32 [-1,1] to int16
+            pcm = pcm[:self.porcupine.frame_length]  # Match Porcupine's expected frame size
             result = self.porcupine.process(pcm)
             if result >= 0:
                 self.on_wake.emit()
 
+        with sd.InputStream(
+            samplerate=self.porcupine.sample_rate,
+            blocksize=self.porcupine.frame_length,
+            dtype='float32',
+            channels=1,
+            callback=audio_callback
+        ):
+            while self._running:
+                sd.sleep(100)  # keep thread alive
+
     def stop(self):
         self._running = False
-        self.stream.stop_stream()
-        self.stream.close()
-        self.pa.terminate()
         self.porcupine.delete()

@@ -4,7 +4,6 @@ torchaudio
 pvporcupine
 soundfile
 requests
-pyaudio
 numpy
 sounddevice
 silero
