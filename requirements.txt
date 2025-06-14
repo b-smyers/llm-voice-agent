@@ -1,5 +1,6 @@
 dotenv
 torch
+torchaudio
 pvporcupine
 soundfile
 requests
@@ -9,4 +10,3 @@ elevenlabs
 google-genai
 openai-whisper
 scipy
-omegaconf
