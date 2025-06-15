@@ -10,3 +10,5 @@ elevenlabs
 google-genai
 openai-whisper
 scipy
+omegaconf
+piper-tts
