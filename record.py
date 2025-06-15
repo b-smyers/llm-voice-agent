@@ -23,7 +23,7 @@ def record(silence_threshold=1.5, start_sound_path="sounds/record_start.wav", st
             audio = q.get()
             buffer.append(audio)
             energy = np.abs(audio).mean()
-            if energy < 0.1:
+            if energy < 0.05:
                 if silence_start is None:
                     silence_start = stream.time
                 elif stream.time - silence_start > silence_threshold:
