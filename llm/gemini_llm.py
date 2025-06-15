@@ -24,7 +24,9 @@ class GeminiLLMClient(BaseLLM):
         with open(system_prompt_path, "r", encoding="utf-8") as f:
             system_prompt = f.read().strip()
             
-        tools = None
+        # Enable google search if no tools are provided
+        tools = [types.Tool(google_search=types.GoogleSearch())]
+        
         if is_tools_enabled:
             # Imports initialize tool decorators, do not remove
             import utils.tools.advice
