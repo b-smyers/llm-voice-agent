@@ -51,5 +51,5 @@ python main.py
     - When you stop speaking, the system will detect silence and play a **stop tone**.
     - After processing your request, the Assistant will reply using text-to-speech.
 
-> ℹ️ **Note**  
+> [!NOTE] 
 > The recording stays open while you're speaking. If there’s background noise or if you don't pause clearly, it may stay active longer than expected.
