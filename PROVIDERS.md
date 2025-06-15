@@ -1,18 +1,16 @@
-# Providers
-
-## Overview
-### STT (Speech-to-Text) Providers
+# Overview
+## STT (Speech-to-Text) Providers
 | Provider                | Link                                                | Source         | Notes                                             |
 |-------------------------|-----------------------------------------------------|----------------|---------------------------------------------------|
 | [Whisper](#whisper-stt) | [GitHub](https://github.com/openai/whisper)         | Open-source    | OpenAI, high accuracy, broad language support     |
 | [Silero](#silero-stt)   | [GitHub](https://github.com/snakers4/silero-models) | Open-source    | Lightweight, medium accuracy, ok language support |
 
-### LLM (Large Language Model) Providers
+## LLM (Large Language Model) Providers
 | Provider              | Link                                                                   | Source         | Notes                                   |
 |-----------------------|------------------------------------------------------------------------|----------------|-----------------------------------------|
 | [Gemini](#gemini-llm) | [Google Gemini](https://ai.google.dev/gemini-api/docs/text-generation) | Closed-source  | Cloud API, free tier, fast              |
 
-### TTS (Text-to-Speech) Providers
+## TTS (Text-to-Speech) Providers
 | Provider                      | Link                                                                     | Source         | Notes                                 |
 |-------------------------------|--------------------------------------------------------------------------|----------------|---------------------------------------|
 | [ElevenLabs](#elevenlabs-tts) | [GitHub](https://github.com/elevenlabs/elevenlabs-python)                | Closed-source  | Cloud API, high-quality, free tier    |
@@ -20,8 +18,8 @@
 | [Piper](#piper-tts)           | [GitHub](https://github.com/rhasspy/piper)                               | Open-source    | Runs locally, fast, medium quality    |
 | [Gemini](#gemini-tts)         | [Google Gemini](https://ai.google.dev/gemini-api/docs/speech-generation) | Closed-source  | Cloud API, high quality, free-for-now |
 
-## STT (Speech-to-Text)
-### Whisper STT
+# STT (Speech-to-Text)
+## Whisper STT
 
 | Source        | Usage       | Quality | Speed  | Pricing  |
 |---------------|-------------|---------|--------|----------|
@@ -31,7 +29,7 @@
 
 Whisper STT is an efficient speech-to-text model that excels at transcribing short or long sentences, but struggles with short inputs. *[Whisper tends to hallucinate](https://arxiv.org/html/2402.08021v2) or generate repetitive phrases when given very short or silent inputs, as it is optimized for longer, continuous speech.
 
-### Silero STT
+## Silero STT
 
 | Source        | Usage       | Quality | Speed  | Pricing  |
 |---------------|-------------|---------|--------|----------|
@@ -41,8 +39,8 @@ Whisper STT is an efficient speech-to-text model that excels at transcribing sho
 
 Silero STT's default output can be a little messy and neglect to add spaces between words, some of theses occurences can be fixed with the text enhancement model on the original transcript. This is the default behavior. The model also struggles to correctly transcribe acronyms.
 
-## LLM (Large Language Model)
-### Gemini LLM
+# LLM (Large Language Model)
+## Gemini LLM
 
 | Source        | Usage       | Quality | Speed  | Pricing  |
 |---------------|-------------|---------|--------|----------|
@@ -52,8 +50,8 @@ Silero STT's default output can be a little messy and neglect to add spaces betw
 
 You can experiment with the Gemini LLM [here](https://aistudio.google.com/prompts/new_chat?model=gemini-2.0-flash). The Gemini LLM is capable of using custom built tools, provided as Python functions, but this comes at a cost. By default, Gemini can use Google Search for grounding, but support for Google Search AND custom tools/functions is not supported as of now.
 
-## TTS (Text-to-Speech)
-### ElevenLabs TTS
+# TTS (Text-to-Speech)
+## ElevenLabs TTS
 
 | Source        | Usage       | Quality | Speed  | Pricing  |
 |---------------|-------------|---------|--------|----------|
@@ -66,7 +64,7 @@ ElevenLabs requires mpv for voice streaming (the default method):
 sudo apt install mpv
 ```
 
-### Silero TTS
+## Silero TTS
 
 | Source        | Usage       | Quality | Speed  | Pricing  |
 |---------------|-------------|---------|--------|----------|
@@ -76,7 +74,7 @@ sudo apt install mpv
 
 Samples for english speaking models can be found [here](https://oobabooga.github.io/silero-samples/index.html).
 
-### Piper TTS
+## Piper TTS
 
 | Source        | Usage       | Quality | Speed  | Pricing  |
 |---------------|-------------|---------|--------|----------|
@@ -86,7 +84,7 @@ Samples for english speaking models can be found [here](https://oobabooga.github
 
 You can sample and download Piper voice models [here](https://rhasspy.github.io/piper-samples/). `English (English, United States) hfc_female` is recommended for its clear articulation on a wide variety of english text, making it suitable for general-purpose conversational agents ([link](https://rhasspy.github.io/piper-samples/#en_US-hfc_female-medium)). Make sure to download both the `.onnx` and `.onnx.json` file and place them in the same directory before passing the path to the PiperTTSClient.
 
-### Gemini TTS
+## Gemini TTS
 
 | Source        | Usage       | Quality | Speed  | Pricing  |
 |---------------|-------------|---------|--------|----------|
