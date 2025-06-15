@@ -6,7 +6,8 @@ from utils.audio import play, temp_wave_file, resample
 from tts.base_tts import BaseTTS
 
 class PiperTTSClient(BaseTTS):
-    def __init__(self, model_path: str = f"voice.onnx"):
+    def __init__(self,
+                 model_path: str):
         self.voice = PiperVoice.load(model_path)
 
     def speak(self, text: str):

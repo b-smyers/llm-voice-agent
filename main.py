@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 load_dotenv()
+import os
 from agent import Agent
 
 from stt.whisper_stt import WhisperSTTClient
@@ -8,7 +9,7 @@ from tts.silero_tts import SileroTTSClient
 
 def main():
     stt_client = WhisperSTTClient(model_size="tiny")
-    llm_client = GeminiLLMClient(prompt_path="internal_prompt.txt")
+    llm_client = GeminiLLMClient(api_key=os.getenv("GEMINI_API_KEY"))
     tts_client = SileroTTSClient()
 
     agent = Agent(

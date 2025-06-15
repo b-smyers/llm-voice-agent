@@ -4,16 +4,24 @@ from elevenlabs import play, stream
 
 from tts.base_tts import BaseTTS
 
-class ElevenLabsTTSClient(BaseTTS):
-    def __init__(self):
-        api_key = os.getenv("ELEVENLABS_API_KEY")
-        self.voice_id = os.getenv("ELEVENLABS_VOICE_ID")
-        self.model_id = os.getenv("ELEVENLABS_MODEL_ID")
-        
-        assert api_key, "ELEVENLABS_API_KEY environment variable not set."
-        assert self.voice_id, "ELEVENLABS_VOICE_ID environment variable not set."
-        assert self.model_id, "ELEVENLABS_MODEL_ID environment variable not set."
+# Model IDs
+# eleven_multilingual_v2 - Highest quality, Larger latency
+# eleven_flash_v2_5 - Lower quality, Super low latency
+# eleven_turbo_v2_5 - Mixed quality, Mixed latency
 
+# Example Voice IDs (more on ElevenLabs website)
+# Daniel - onwK4e9ZLuTAKqWW03F9 (deep voice narrator)
+# Elli - MF3mGyEYCl7XYWbV9V6O (riled up, can be agressive)
+# Jessica - cgSgspJ2msm6clMCkdW9 (more cheery)
+# Racheal - 21m00Tcm4TlvDq8ikWAM (laid back)
+
+class ElevenLabsTTSClient(BaseTTS):
+    def __init__(self,
+                 api_key: str,
+                 model_id: str = "21m00Tcm4TlvDq8ikWAM",
+                 voice_id: str = "eleven_flash_v2_5"):
+        self.model_id = model_id
+        self.voice_id = voice_id
         self.client = ElevenLabs(api_key=api_key)
 
     # TTS stream

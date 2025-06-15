@@ -6,15 +6,19 @@ import os
 from tts.base_tts import BaseTTS
 
 class SileroTTSClient(BaseTTS):
-    def __init__(self):
+    def __init__(self,
+                 language: str = 'en',
+                 speaker: str = 'v3_en',
+                 speaker_id: int = 30):
         self.sample_rate = 8000
-        self.speaker_id = 30
+        self.language = language
+        self.speaker_id = speaker_id
 
         self.model, self.utils = torch.hub.load(
             repo_or_dir='snakers4/silero-models',
             model='silero_tts',
-            language='en',
-            speaker='v3_en',
+            language=language,
+            speaker=speaker,
             verbose=False
         )
 
@@ -23,7 +27,7 @@ class SileroTTSClient(BaseTTS):
             print("[WARN] Text too long to process.")
             text = "The text was too long to process"
         
-        speaker_tag = f'en_{self.speaker_id}'
+        speaker_tag = f'{self.language}_{self.speaker_id}'
 
         audio_np = self.model.apply_tts(
             text,

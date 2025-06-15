@@ -7,13 +7,10 @@ from tts.base_tts import BaseTTS
 
 class GeminiTTSClient(BaseTTS):
     def __init__(self,
+                 api_key: str,
                  model_id: str = "gemini-2.5-flash-preview-tts",
                  voice_name: str = 'Erinome',
-                 voice_prompt: str = "Read aloud quickly with a calm, confident and tone: "):
-        api_key = os.getenv("GEMINI_API_KEY")
-
-        assert api_key, "GEMINI_API_KEY environment variable not set."
-        
+                 voice_prompt: str = "Read aloud quickly with a calm, confident tone: "):        
         self.client = genai.Client(api_key=api_key)
         self.model_id = model_id
         self.voice_prompt = voice_prompt

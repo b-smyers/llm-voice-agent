@@ -16,15 +16,16 @@ from tts.silero_tts import SileroTTSClient
 class Agent:
     def __init__(
         self,
-        stt_client: BaseSTT = WhisperSTTClient(),
-        llm_client: BaseLLM = GeminiLLMClient(),
-        tts_client: BaseTTS = SileroTTSClient()
+        stt_client: BaseSTT,
+        llm_client: BaseLLM,
+        tts_client: BaseTTS,
+        silence_threshold: float = 1.5
     ):
         self.stt_client = stt_client
         self.llm_client = llm_client
         self.tts_client = tts_client
 
-        self.silence_threshold = 1.5 # sec
+        self.silence_threshold = silence_threshold # sec
         self.start_sound_path = "sounds/record_start.wav"
         self.stop_sound_path = "sounds/record_end.wav"
 

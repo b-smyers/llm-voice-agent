@@ -5,14 +5,17 @@ from utils.audio import temp_wave_file
 from stt.base_stt import BaseSTT
 
 class SileroSTTClient(BaseSTT):
-    def __init__(self, device: str = 'cpu'):
+    def __init__(self,
+                 device: str = 'cpu',
+                 language: str = 'en'):
         self.device = torch.device(device)
+        self.language = language
 
         # Load Silero STT model from torch.hub
         self.stt_model, self.stt_decoder, stt_utils = torch.hub.load(
             repo_or_dir='snakers4/silero-models',
             model='silero_stt',
-            language='en',
+            language=self.language,
             device=self.device,
             verbose=False
         )
@@ -37,7 +40,7 @@ class SileroSTTClient(BaseSTT):
             transcript = " ".join(transcripts)
 
             # Apply text enhancement (punctuation, capitalization)
-            transcript = self.apply_te(transcript, lan='en')
+            transcript = self.apply_te(transcript, lan=self.language)
 
         finally:
             os.remove(tmp_filename)
