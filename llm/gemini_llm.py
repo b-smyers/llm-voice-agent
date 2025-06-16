@@ -10,7 +10,7 @@ class GeminiLLMClient(BaseLLM):
     def __init__(self,
                  api_key: str,
                  model_id: str = "gemini-2.0-flash",
-                 system_prompt_path: str = "internal_prompt.txt",
+                 system_prompt_path: str = None,
                  is_tools_enabled: bool = False,
                  temperature: float = 2,
                  top_p: float = 0.8,
@@ -18,11 +18,14 @@ class GeminiLLMClient(BaseLLM):
                  max_tokens: int = 600):
         self.client = genai.Client(api_key=api_key)
 
-        if not os.path.exists(system_prompt_path):
-            raise FileNotFoundError(f"Prompt file not found at: {system_prompt_path}")
-        
-        with open(system_prompt_path, "r", encoding="utf-8") as f:
-            system_prompt = f.read().strip()
+        if system_prompt_path:
+            if not os.path.exists(system_prompt_path):
+                raise FileNotFoundError(f"Prompt file not found at: {system_prompt_path}")
+            
+            with open(system_prompt_path, "r", encoding="utf-8") as f:
+                system_prompt = f.read().strip()
+        else:
+            system_prompt = ""
             
         # Enable google search if no tools are provided
         tools = [types.Tool(google_search=types.GoogleSearch())]
