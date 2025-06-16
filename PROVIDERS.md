@@ -5,10 +5,11 @@
 | [Whisper](#whisper-stt) | [GitHub](https://github.com/openai/whisper)         | Open-source    | OpenAI, high accuracy, broad language support     |
 | [Silero](#silero-stt)   | [GitHub](https://github.com/snakers4/silero-models) | Open-source    | Lightweight, medium accuracy, ok language support |
 
-## LLM (Large Language Model) Providers
-| Provider              | Link                                                                   | Source         | Notes                                   |
-|-----------------------|------------------------------------------------------------------------|----------------|-----------------------------------------|
-| [Gemini](#gemini-llm) | [Google Gemini](https://ai.google.dev/gemini-api/docs/text-generation) | Closed-source  | Cloud API, free tier, fast              |
+### LLM (Large Language Model) Providers
+| Provider                | Link                                                                   | Source         | Notes                                   |
+|-------------------------|------------------------------------------------------------------------|----------------|-----------------------------------------|
+| [Gemini](#gemini-llm)   | [Google Gemini](https://ai.google.dev/gemini-api/docs/text-generation) | Closed-source  | Cloud API, free tier, fast              |
+| [ChatGPT](#chatgpt-llm) | [ChatGPT API](https://openai.com/api/)                                 | Closed-source  | Cloud API, paid, fast                   |
 
 ## TTS (Text-to-Speech) Providers
 | Provider                      | Link                                                                     | Source         | Notes                                 |
@@ -50,8 +51,18 @@ Silero STT's default output can be a little messy and neglect to add spaces betw
 
 You can experiment with the Gemini LLM [here](https://aistudio.google.com/prompts/new_chat?model=gemini-2.0-flash). The Gemini LLM is capable of using custom built tools, provided as Python functions, but this comes at a cost. By default, Gemini can use Google Search for grounding, but support for Google Search AND custom tools/functions is not supported as of now.
 
-# TTS (Text-to-Speech)
-## ElevenLabs TTS
+### ChatGPT LLM
+
+| Source        | Usage       | Quality | Speed  | Pricing  |
+|---------------|-------------|---------|--------|----------|
+| Closed-source | Cloud API   | High    | High   | Paid     |
+
+**Additional Notes**
+
+Unfortunately, free testing is limited to what is available on the official ChatGPT website. By default, the ChatGPTLLMClient uses `gpt-4.1-nano`, an incredibly cheap and fast model. Tool usage is supported by ChatGPT but has not yet been integrated in this repo.
+
+## TTS (Text-to-Speech)
+### ElevenLabs TTS
 
 | Source        | Usage       | Quality | Speed  | Pricing  |
 |---------------|-------------|---------|--------|----------|

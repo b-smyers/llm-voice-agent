@@ -14,7 +14,7 @@ A variety of STT, TTS, and LLM providers are supported out of the box, allowing 
 
 Supported provider types:
 - **🗣️ Speech-to-Text (STT):** Whisper, Silero
-- **💬 Large Language Model (LLM):** Gemini
+- **💬 Large Language Model (LLM):** Gemini, ChatGPT
 - **🔊 Text-to-Speech (TTS):** ElevenLabs, Silero, Piper, Gemini
 
 For detailed information on each provider — including features, usage notes, and recommendations — check the [full provider reference](PROVIDERS.md).

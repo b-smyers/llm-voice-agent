@@ -76,7 +76,7 @@ class Agent:
                 print("[INFO] Aborting interaction.")
                 break
 
-            print("[INFO] Gemini: " + answer)
+            print("[INFO] LLM: " + answer)
             self.tts_client.speak(answer)
 
             if not self._should_continue_conversation(answer):
